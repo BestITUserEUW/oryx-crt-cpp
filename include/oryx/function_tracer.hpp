@@ -24,7 +24,6 @@ private:
 }  // namespace oryx
 
     #define ORYX_TRACE_FUNCTION() oryx::FunctionTracer __func_tracer__
-
+#else
+    #define ORYX_TRACE_FUNCTION() (void)0
 #endif
-
-#define ORYX_TRACE_FUNCTION() (void)0
