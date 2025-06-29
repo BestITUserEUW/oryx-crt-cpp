@@ -13,7 +13,7 @@ public:
     explicit Error(std::string what)
         : what_(std::move(what)) {}
 
-    [[nodiscard]] auto What() const -> std::string_view { return what_; }
+    [[nodiscard]] auto what() const -> std::string_view { return what_; }
 
 private:
     std::string what_;
