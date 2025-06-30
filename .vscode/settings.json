@@ -75,6 +75,9 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "print": "cpp",
-        "source_location": "cpp"
+        "source_location": "cpp",
+        "list": "cpp",
+        "regex": "cpp",
+        "cinttypes": "cpp"
     },
 }

@@ -37,6 +37,8 @@ if(ORYX_CRT_BUILD_TESTS)
     add_executable(${test_exe} 
         tests/main.cpp 
         tests/argparse_test.cpp
+        tests/stopwatch_test.cpp
+        tests/error_test.cpp
     )
     target_link_libraries(${test_exe} PRIVATE ${PROJECT_NAME})
 endif()
