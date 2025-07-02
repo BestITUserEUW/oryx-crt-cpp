@@ -9,7 +9,7 @@ namespace oryx::chrono {
 class FrameRateController {
 public:
     explicit FrameRateController(int target_fps);
-    bool Sleep();
+    auto Sleep() -> bool;
 
 private:
     const std::chrono::milliseconds target_frame_duration_;

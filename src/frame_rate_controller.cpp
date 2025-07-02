@@ -10,7 +10,7 @@ FrameRateController::FrameRateController(int target_fps)
     : target_frame_duration_(1000 / target_fps),
       sw_() {}
 
-bool FrameRateController::Sleep() {
+auto FrameRateController::Sleep() -> bool {
     auto elapsed = sw_.ElapsedMs();
 
     if (elapsed < target_frame_duration_) {
