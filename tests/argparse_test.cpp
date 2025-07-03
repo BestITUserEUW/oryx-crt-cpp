@@ -3,7 +3,7 @@
 #include <oryx/types.hpp>
 #include <oryx/argparse.hpp>
 
-namespace oryx {
+using namespace oryx;
 
 static constexpr i32 kArgc = 7;
 static constexpr auto kStringArgValue = "some/filepath";
@@ -54,14 +54,14 @@ TEST_CASE("VisitIfContainss calls visitor if arg present and convertible to stri
     auto cli = argparse::CLI(kArgc, kArgv);
     std::string value;
 
-    cli.VisitIfContains<std::string>("--string", [&](std::string parsed) { value = parsed; });
+    cli.VisitIfContains<std::string>("--string", [&](std::string parsed) { value = std::move(parsed); });
     CHECK_EQ(value, kStringArgValue);
 }
 
 TEST_CASE("VisitIfContains does not call visitor if arg is not present") {
     auto cli = argparse::CLI(kArgc, kArgv);
     bool called{};
-    cli.VisitIfContains<std::string>("--data", [&](std::string parsed) { called = true; });
+    cli.VisitIfContains<std::string>("--data", [&](std::string) { called = true; });
     CHECK_FALSE(called);
 }
 
@@ -71,5 +71,3 @@ TEST_CASE("VisitIfContains does not call visitor if arg present but parse fails"
     cli.VisitIfContains<f32>("--string", [&](f32 parsed) { called = true; });
     CHECK_FALSE(called);
 }
-
-}  // namespace oryx

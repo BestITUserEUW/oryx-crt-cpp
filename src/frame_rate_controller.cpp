@@ -11,15 +11,15 @@ FrameRateController::FrameRateController(int target_fps)
       sw_() {}
 
 auto FrameRateController::Sleep() -> bool {
-    auto elapsed = sw_.ElapsedMs();
-
+    const auto elapsed = sw_.ElapsedMs();
+    bool slept{};
     if (elapsed < target_frame_duration_) {
-        std::this_thread::sleep_for(milliseconds(target_frame_duration_ - elapsed));
-        return true;
+        const auto sleep_time = milliseconds(target_frame_duration_ - elapsed);
+        std::this_thread::sleep_for(sleep_time);
+        slept = true;
     }
-
     sw_.Reset();
-    return false;
+    return slept;
 }
 
 }  // namespace oryx::chrono

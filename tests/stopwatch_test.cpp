@@ -4,7 +4,7 @@
 
 #include <oryx/chrono/stopwatch.hpp>
 
-namespace oryx::chrono {
+using namespace oryx::chrono;
 
 constexpr std::chrono::milliseconds kErrorMargin(100);
 
@@ -16,5 +16,3 @@ TEST_CASE("Stopwatch should measure elapsed time") {
     CHECK_GE(elapsed, sleep_time);
     CHECK_LT(elapsed, sleep_time + kErrorMargin);
 }
-
-}  // namespace oryx::chrono
