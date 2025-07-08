@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.24)
 project(oryx-crt-cpp VERSION 0.0.1 LANGUAGES CXX)
 
 option(ORYX_CRT_BUILD_SHARED_LIBS "Build shared library" ${BUILD_SHARED_LIBS})
-option(ORYX_CRT_BUILD_TESTS "Build tests")
+option(ORYX_CRT_BUILD_TESTS "Build tests" OFF)
+option(ORYX_CRT_INSTALL "Install the project" ${PROJECT_IS_TOP_LEVEL})
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if(NOT DEFINED CMAKE_CXX_STANDARD)
@@ -18,9 +19,19 @@ else()
     add_library(${PROJECT_NAME} STATIC)
 endif()
 
-target_compile_options(${PROJECT_NAME} PRIVATE
-    -Wall -Wextra -Wuninitialized -Wno-unused-function -Wunused-variable
-)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        /W4
+    )
+else()
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wall 
+        -Wextra 
+        -Wuninitialized 
+        -Wno-unused-function 
+        -Wunused-variable
+    )
+endif()
 
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -39,11 +50,13 @@ if(ORYX_CRT_BUILD_TESTS)
         tests/argparse_test.cpp
         tests/stopwatch_test.cpp
         tests/error_test.cpp
+        tests/string_split_test.cpp
+        tests/callback_list_test.cpp
     )
     target_link_libraries(${test_exe} PRIVATE ${PROJECT_NAME})
 endif()
 
-if (PROJECT_IS_TOP_LEVEL)
+if (ORYX_CRT_INSTALL)
     include(GNUInstallDirs)
     include(CMakePackageConfigHelpers)
 

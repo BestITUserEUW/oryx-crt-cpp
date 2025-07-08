@@ -6,7 +6,9 @@
 
 using namespace oryx::chrono;
 
+namespace {
 constexpr std::chrono::milliseconds kErrorMargin(100);
+}
 
 TEST_CASE("Stopwatch should measure elapsed time") {
     std::chrono::milliseconds sleep_time(100);

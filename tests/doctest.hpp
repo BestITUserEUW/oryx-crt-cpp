@@ -2297,8 +2297,8 @@ int registerReporter(const char* name, int priority, bool isReporter) {
         DOCTEST_TEST_CASE_TEMPLATE_IMPL(dec, T, DOCTEST_ANONYMOUS(DOCTEST_ANON_TMP_), __VA_ARGS__)
 
     // for subcases
-    #define DOCTEST_SUBCASE(name)                                                                      \
-        if (const doctest::detail::Subcase & DOCTEST_ANONYMOUS(DOCTEST_ANON_SUBCASE_) DOCTEST_UNUSED = \
+    #define DOCTEST_SUBCASE(name)                                                                     \
+        if (const doctest::detail::Subcase& DOCTEST_ANONYMOUS(DOCTEST_ANON_SUBCASE_) DOCTEST_UNUSED = \
                 doctest::detail::Subcase(name, __FILE__, __LINE__))
 
     // for grouping tests in test suites by using code blocks

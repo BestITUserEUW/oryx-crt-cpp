@@ -11,18 +11,21 @@ public:
     using clock = std::chrono::steady_clock;
 
     Stopwatch()
-        : start_tp_{clock::now()} {}
+        : start_{clock::now()} {}
 
-    auto Elapsed() const -> std::chrono::duration<f64> { return std::chrono::duration<f64>(clock::now() - start_tp_); }
+    Stopwatch(clock::time_point start)
+        : start_(start) {}
 
+    auto Elapsed() const -> std::chrono::duration<f64> { return std::chrono::duration<f64>(clock::now() - start_); }
     auto ElapsedMs() const -> std::chrono::milliseconds {
-        return std::chrono::duration_cast<std::chrono::milliseconds>(clock::now() - start_tp_);
+        return std::chrono::duration_cast<std::chrono::milliseconds>(clock::now() - start_);
     }
+    void Reset() { start_ = clock::now(); }
 
-    void Reset() { start_tp_ = clock::now(); }
+    auto GetStart() const -> clock::time_point { return start_; }
 
 private:
-    std::chrono::time_point<clock> start_tp_;
+    clock::time_point start_;
 };
 
 }  // namespace oryx::chrono

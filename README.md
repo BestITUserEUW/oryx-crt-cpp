@@ -1,6 +1,14 @@
 # oryx-crt-cpp
-Common C++ Runtime used for demos and sample application
 
+Common C++ Runtime used for personal C++ Projects. Happy to accept any contributions and improvements to this library
+
+## Third Party libraries
+
+- [httplib](https://github.com/yhirose/cpp-httplib) MIT license
+- [thread_pool](https://github.com/bshoshany/thread-pool.git) MIT license
+- [enchantum](https://github.com/ZXShady/enchantum.git) MIT license
+- [synchronized](https://github.com/jrgfogh/synchronized_value.git) LGPL-2.1 license
+- [spsc_queue] (https://github.com/facebook/folly.git) Apache-2.0 license
 
 ## Build Locally
 

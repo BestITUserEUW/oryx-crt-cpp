@@ -9,8 +9,20 @@ jobs:
       matrix:
         include:
           - compiler: llvm
+            compiler-version: 16
+            cxx: 20
+          - compiler: llvm
+            compiler-version: 17
+            cxx: 20
+          - compiler: llvm
             compiler-version: 18
             cxx: 23
+          - compiler: gcc
+            compiler-version: 12
+            cxx: 20
+          - compiler: gcc
+            compiler-version: 13
+            cxx: 20  
           - compiler: gcc
             compiler-version: 14
             cxx: 23  
@@ -49,4 +61,4 @@ jobs:
           cmake --build build
       - name: Run tests
         run: |
-          ./build/oryx-crt-cpp_tests --success=true
+          ./build/oryx-crt-cpp_tests --success
