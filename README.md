@@ -8,7 +8,7 @@ Common C++ Runtime used for personal C++ Projects. Happy to accept any contribut
 - [thread_pool](https://github.com/bshoshany/thread-pool.git) MIT license
 - [enchantum](https://github.com/ZXShady/enchantum.git) MIT license
 - [synchronized](https://github.com/jrgfogh/synchronized_value.git) LGPL-2.1 license
-- [spsc_queue] (https://github.com/facebook/folly.git) Apache-2.0 license
+- [spsc_queue](https://github.com/facebook/folly.git) Apache-2.0 license
 
 ## Build Locally
 
