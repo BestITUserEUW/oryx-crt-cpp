@@ -28,7 +28,15 @@ constexpr auto FromChars(std::string_view s) -> std::optional<T> {
 
 template <>
 constexpr auto FromChars<bool>(std::string_view s) -> std::optional<bool> {
+#if __cpp_lib_optional >= 202110L
     return FromChars<uint8_t>(s).transform([](uint8_t val) { return static_cast<bool>(val); });
+#else
+    const auto result = FromChars<uint8_t>(s);
+    if (result)
+        return static_cast<bool>(*result);
+    else
+        return std::nullopt;
+#endif
 }
 
 }  // namespace oryx

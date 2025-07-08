@@ -18,7 +18,7 @@ struct StringSplitFunctor {
             result.emplace_back(input.substr(pos, delim_pos - pos));
             pos = delim_pos + 1;
         }
-        if (!result.empty()) result.emplace_back(input.substr(pos));  // Add the last part
+        result.emplace_back(input.substr(pos));  // Add the last part
         return result;
     }
 };

@@ -28,7 +28,8 @@ TEST_CASE("split string space") {
 
 TEST_CASE("nothing will be split") {
     const auto split = StringSplit("this will not be split", '+');
-    REQUIRE(split.empty());
+    REQUIRE(split.size() == 1);
+    REQUIRE(split[0] == "this will not be split");
 }
 
 }  // namespace oryx
