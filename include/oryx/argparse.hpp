@@ -8,6 +8,10 @@
 #include "from_chars.hpp"
 
 namespace oryx::argparse {
+namespace details {
+template <typename>
+constexpr bool always_false = false;
+}
 
 class CLI {
 public:
@@ -17,7 +21,7 @@ public:
     auto Contains(std::string_view option) const { return std::ranges::find(view_, option) != view_.end(); }
 
     template <class T>
-    [[nodiscard]] auto GetValue(std::string_view option) const -> std::optional<T> {
+    [[nodiscard]] constexpr auto GetValue(std::string_view option) const -> std::optional<T> {
         auto it = std::ranges::find(view_, option);
         if (it == view_.end()) {
             return std::nullopt;
@@ -28,14 +32,15 @@ public:
             return std::nullopt;
         }
 
-        if constexpr (std::is_same<T, std::string>()) {
+        if constexpr (std::is_same_v<T, std::string>) {
             return std::string(*vit);
-        } else if constexpr (std::is_integral<T>()) {
+        } else if constexpr (std::is_integral_v<T>) {
             return FromChars<T>(*vit);
-        } else if constexpr (std::is_floating_point<T>()) {
+        } else if constexpr (std::is_floating_point_v<T>) {
             return FromChars<T>(*vit);
         } else {
-            static_assert(false, "Get argument only supports std::string integral and floating point types");
+            static_assert(details::always_false<T>,
+                          "Get argument only supports std::string integral and floating point types");
         }
     }
 
