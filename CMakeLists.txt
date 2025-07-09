@@ -54,6 +54,9 @@ if(ORYX_CRT_BUILD_TESTS)
         tests/callback_list_test.cpp
     )
     target_link_libraries(${test_exe} PRIVATE ${PROJECT_NAME})
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        target_compile_definitions(${test_exe} PUBLIC DOCTEST_CONFIG_USE_STD_HEADERS)
+    endif()
 endif()
 
 if (ORYX_CRT_INSTALL)
