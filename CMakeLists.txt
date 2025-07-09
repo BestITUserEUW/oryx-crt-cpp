@@ -52,6 +52,7 @@ if(ORYX_CRT_BUILD_TESTS)
         tests/error_test.cpp
         tests/string_split_test.cpp
         tests/callback_list_test.cpp
+        tests/from_chars_test.cpp
     )
     target_link_libraries(${test_exe} PRIVATE ${PROJECT_NAME})
     if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
