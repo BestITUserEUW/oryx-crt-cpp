@@ -2,30 +2,34 @@
 
 #include <chrono>
 
-#include <oryx/types.hpp>
-
 namespace oryx::chrono {
+namespace details {
 
-class Stopwatch {
+template <class Clock>
+    requires std::chrono::is_clock_v<Clock>
+class StopwatchImpl {
 public:
-    using clock = std::chrono::steady_clock;
+    StopwatchImpl()
+        : start_{Clock::now()} {}
 
-    Stopwatch()
-        : start_{clock::now()} {}
-
-    Stopwatch(clock::time_point start)
+    explicit StopwatchImpl(Clock::time_point start)
         : start_(start) {}
 
-    auto Elapsed() const -> std::chrono::duration<f64> { return std::chrono::duration<f64>(clock::now() - start_); }
+    auto Elapsed() const -> std::chrono::nanoseconds { return Clock::now() - start_; }
     auto ElapsedMs() const -> std::chrono::milliseconds {
-        return std::chrono::duration_cast<std::chrono::milliseconds>(clock::now() - start_);
+        return std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - start_);
     }
-    void Reset() { start_ = clock::now(); }
+    void Reset() { start_ = Clock::now(); }
 
-    auto GetStart() const -> clock::time_point { return start_; }
+    auto GetStart() const { return start_; }
 
 private:
-    clock::time_point start_;
+    Clock::time_point start_;
 };
+
+}  // namespace details
+
+using HighResolutionStopwatch = details::StopwatchImpl<std::chrono::high_resolution_clock>;
+using Stopwatch = details::StopwatchImpl<std::chrono::steady_clock>;
 
 }  // namespace oryx::chrono

@@ -40,6 +40,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 target_sources(${PROJECT_NAME} PRIVATE 
     src/frame_rate_controller.cpp
+    src/uuid.cpp
 )
 
 
@@ -53,6 +54,10 @@ if(ORYX_CRT_BUILD_TESTS)
         tests/string_split_test.cpp
         tests/callback_list_test.cpp
         tests/from_chars_test.cpp
+        tests/is_one_off_test.cpp
+        tests/unique_file_ptr_test.cpp
+        tests/error_group_test.cpp
+        tests/traits_test.cpp
     )
     target_link_libraries(${test_exe} PRIVATE ${PROJECT_NAME})
     if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
