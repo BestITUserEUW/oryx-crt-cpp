@@ -18,9 +18,6 @@ jobs:
             compiler-version: 18
             cxx: 23
           - compiler: gcc
-            compiler-version: 12
-            cxx: 20
-          - compiler: gcc
             compiler-version: 13
             cxx: 20  
           - compiler: gcc

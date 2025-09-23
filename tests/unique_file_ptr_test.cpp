@@ -41,6 +41,7 @@ TEST_CASE("Open file works") {
         CHECK(file_ptr);
         char buffer[12];
         int bytes_read = fread(buffer, sizeof(char), 12, file_ptr.get());
+        buffer[11] = '\0';
         CHECK_EQ(data.size(), bytes_read);
         std::string_view read_data{buffer};
         CHECK_EQ(read_data, data);
