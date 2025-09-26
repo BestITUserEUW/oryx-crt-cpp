@@ -10,11 +10,11 @@ namespace oryx {
 
 auto uuid4::Generate() -> std::string {
     std::random_device rd;
-    std::uniform_int_distribution<uint8_t> dis(0, 255);
+    std::uniform_int_distribution<unsigned int> dis(0, 255);
 
     // generate 16 random bytes
     std::array<uint8_t, 16> bytes;
-    std::ranges::generate(bytes, [&dis, &rd] { return dis(rd); });
+    std::ranges::generate(bytes, [&dis, &rd] { return static_cast<uint8_t>(dis(rd)); });
 
     // set version to 4
     bytes[6] = (bytes[6] & 0x0F) | 0x40;

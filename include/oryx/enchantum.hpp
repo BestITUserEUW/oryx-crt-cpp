@@ -414,7 +414,8 @@ constexpr void parse_string(const char* str,
         str += SZC("_ *V = ");
         if (str[0] == '(') {
             str += least_length_when_casting;
-            while (*str++ != ';') /*intentionally empty*/;
+            while (*str++ != ';') /*intentionally empty*/
+                ;
             str += SZC(" ");
         } else {
             str += least_length_when_value;
@@ -654,7 +655,7 @@ constexpr auto reflect(std::index_sequence<Is...>) noexcept {
 
     #define ENCAHNTUM_DETAILS_GCC_MAJOR __GNUC__
     #if __GNUC__ <= 10
-    // for out of bounds conversions for C style enums
+   // for out of bounds conversions for C style enums
         #pragma GCC diagnostic push
         #pragma GCC diagnostic ignored "-Wconversion"
     #endif
@@ -936,7 +937,8 @@ constexpr void parse_string(const char* str,
     #else
             str += least_length_when_casting;
     #endif
-            while (*str++ != ',') /*intentionally empty*/;
+            while (*str++ != ',') /*intentionally empty*/
+                ;
         } else {
             str += least_length_when_value;
 
