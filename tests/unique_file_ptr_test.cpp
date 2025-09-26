@@ -30,7 +30,7 @@ TEST_CASE("Open file works") {
     std::string_view data{"Hello World"};
 
     {
-        auto file_ptr = OpenFile(file_name.c_str(), "wr");
+        auto file_ptr = OpenFile(file_name.c_str(), "w");
         CHECK(file_ptr);
         int bytes_written = fwrite(data.data(), sizeof(std::string_view::value_type), data.size(), file_ptr.get());
         CHECK_EQ(data.size(), bytes_written);
