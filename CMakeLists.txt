@@ -20,27 +20,41 @@ else()
 endif()
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        /W4
+    target_compile_options(${PROJECT_NAME} 
+        PRIVATE
+            /W4
     )
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        -Wall 
-        -Wextra 
-        -Wuninitialized 
-        -Wno-unused-function 
-        -Wunused-variable
+    target_compile_options(${PROJECT_NAME} 
+        PRIVATE
+            -Wall 
+            -Wextra
+            -Werror
+            -Wuninitialized 
+            -Wno-unused-function 
+            -Wunused-variable
     )
 endif()
 
-target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+target_include_directories(${PROJECT_NAME} 
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
 )
 
-target_sources(${PROJECT_NAME} PRIVATE 
-    src/frame_rate_controller.cpp
-    src/uuid.cpp
+file(GLOB_RECURSE ORYX_CRT_HEADERS
+    RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/*"
+)
+
+target_sources(${PROJECT_NAME} 
+    PRIVATE 
+        src/frame_rate_controller.cpp
+        src/uuid.cpp
+    PUBLIC
+        FILE_SET HEADERS
+        BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include"
+        FILES ${ORYX_CRT_HEADERS}
 )
 
 
@@ -59,7 +73,9 @@ if(ORYX_CRT_BUILD_TESTS)
         tests/error_group_test.cpp
         tests/traits_test.cpp
     )
+
     target_link_libraries(${test_exe} PRIVATE ${PROJECT_NAME})
+    
     if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         target_compile_definitions(${test_exe} PUBLIC DOCTEST_CONFIG_USE_STD_HEADERS)
     endif()
@@ -69,35 +85,36 @@ if (ORYX_CRT_INSTALL)
     include(GNUInstallDirs)
     include(CMakePackageConfigHelpers)
 
-    configure_package_config_file(cmake/${PROJECT_NAME}-config.cmake.in
-      ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake
-      INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+    configure_package_config_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}-config.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+        INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
     )
 
-    install(
-        FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
-        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
-    )
-
-    file(GLOB_RECURSE ORYX_CRT_HEADERS RELATIVE ${CMAKE_CURRENT_LIST_DIR} "${CMAKE_CURRENT_LIST_DIR}/include/*" )
-
-    target_sources(${PROJECT_NAME}
-        PUBLIC
-        FILE_SET oryx_headers
-        TYPE HEADERS
-        BASE_DIRS $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-        FILES ${ORYX_CRT_HEADERS}
+    write_basic_package_version_file(
+        "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-version.cmake"
+        COMPATIBILITY ExactVersion
     )
 
     install(
         TARGETS ${PROJECT_NAME}
-        EXPORT ${PROJECT_NAME}-exports
-        FILE_SET oryx_headers DESTINATION ${INCLUDE_INSTALL_DIR}
+        EXPORT ${PROJECT_NAME}-targets
+        FILE_SET HEADERS
     )
 
     install(
-        EXPORT ${PROJECT_NAME}-exports
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+        FILES 
+            "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
+            "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-version.cmake"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
+        COMPONENT ${PROJECT_NAME}
+    )
+
+    install(
+        EXPORT ${PROJECT_NAME}-targets
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
         NAMESPACE oryx::
+        FILE ${PROJECT_NAME}-targets.cmake
+        COMPONENT ${PROJECT_NAME}
     )
 endif ()
