@@ -30,15 +30,19 @@ public:
 
     auto target_cycle_time() const -> Duration { return target_; }
 
-    static auto MakeAutoResetGuard(CycleTimer<Clock>& timer) {
-        return ScopeExit{[&timer] { timer.Reset(); }};
-    };
-
-    static auto MakeFrameRateTimer(int target_fps) { return CycleTimer<Clock>{Duration{1000 / target_fps}}; }
-
 private:
     const Duration target_;
     details::StopwatchImpl<Clock> sw_{};
 };
+
+template <class Clock>
+auto MakeScopedCycleTimerReset(CycleTimer<Clock>& timer) {
+    return ScopeExit{[&timer] { timer.Reset(); }};
+}
+
+template <class Clock>
+auto MakeFrameRateTimer(int target_fps) {
+    return CycleTimer<Clock>{typename CycleTimer<Clock>::Duration{1000 / target_fps}};
+}
 
 }  // namespace oryx::chrono
