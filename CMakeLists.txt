@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
-project(oryx-crt-cpp VERSION 0.0.1 LANGUAGES CXX)
+project(oryx-crt-cpp VERSION 0.1.0 LANGUAGES CXX)
 
 option(ORYX_CRT_BUILD_SHARED_LIBS "Build shared library" ${BUILD_SHARED_LIBS})
 option(ORYX_CRT_BUILD_TESTS "Build tests" OFF)
