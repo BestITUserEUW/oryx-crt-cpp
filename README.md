@@ -13,7 +13,7 @@ Common C++ Runtime used for personal C++ Projects. Happy to accept any contribut
 ## Build Locally
 
 ```bash
-cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_BUILD_TYPE=Debug -Bbuild -H.
+cmake -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DCMAKE_BUILD_TYPE=Debug -Bbuild -H.
       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       Only needed for clangd   
 ```

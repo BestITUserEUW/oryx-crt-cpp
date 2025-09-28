@@ -46,10 +46,6 @@ public:
 
     template <class T>
     void VisitIfContains(std::string_view option, auto visitor) {
-        if (!Contains(option)) {
-            return;
-        }
-
         auto value = GetValue<T>(option);
         if (value) {
             std::invoke(visitor, std::forward<T>(*value));

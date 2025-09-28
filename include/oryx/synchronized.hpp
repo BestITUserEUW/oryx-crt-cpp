@@ -2,18 +2,14 @@
 
 #include <mutex>
 
+#include <oryx/traits.hpp>
+
 namespace oryx {
 
-template <typename L>
-concept basic_lockable = requires(L m) {
-    m.lock();
-    m.unlock();
-};
-
-template <typename GuardedType, basic_lockable MutexType = std::mutex>
+template <typename GuardedType, traits::BasicLockable MutexType = std::mutex>
 class synchronized;
 
-template <typename GuardedType, basic_lockable MutexType = std::mutex>
+template <typename GuardedType, traits::BasicLockable MutexType = std::mutex>
 class update_guard {
     std::unique_lock<MutexType> lock_;
     GuardedType *guarded_data_;
@@ -35,7 +31,7 @@ public:
     auto operator*() const noexcept -> GuardedType & { return *guarded_data_; }
 };
 
-template <typename GuardedData, basic_lockable MutexType>
+template <typename GuardedData, traits::BasicLockable MutexType>
 class synchronized {
     friend class update_guard<GuardedData, MutexType>;
     friend class update_guard<GuardedData const, MutexType>;

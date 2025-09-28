@@ -18,16 +18,13 @@ jobs:
             compiler-version: 18
             cxx: 23
           - compiler: gcc
-            compiler-version: 12
-            cxx: 20
-          - compiler: gcc
             compiler-version: 13
             cxx: 20  
           - compiler: gcc
             compiler-version: 14
-            cxx: 23  
+            cxx: 23
     name: "${{ github.job }} (C++${{ matrix.cxx }}-${{ matrix.compiler }}-${{ matrix.compiler-version }})"
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
