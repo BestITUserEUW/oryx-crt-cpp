@@ -6,7 +6,7 @@
 
 namespace oryx::chrono {
 
-class [[deprecated("Depreacted in favor of MakeFrameRateTimer() from cycle_timer.hpp")]] FrameRateController {
+class [[deprecated("Deprecated in favor of MakeFrameRateTimer() from cycle_timer.hpp")]] FrameRateController {
 public:
     explicit FrameRateController(int target_fps);
     auto Sleep() -> bool;
