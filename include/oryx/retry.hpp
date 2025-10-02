@@ -1,59 +1,54 @@
 #pragma once
 
 #include <chrono>
+#include <concepts>
 #include <thread>
-#include <format>
+#include <type_traits>
 
-#include <oryx/expected.hpp>
-#include <oryx/error.hpp>
 #include <oryx/types.hpp>
 
 namespace oryx::retry {
 
-enum class ErrorKind : uint8_t {
-    kRetriesExhausted,
-};
-
 struct ExponentialConfig {
-    std::string name;
-    std::chrono::milliseconds start_backoff;
-    std::chrono::milliseconds max_backoff;
-    int max_retries;
+    using Duration = std::chrono::milliseconds;
+
+    Duration start_backoff;
+    Duration max_backoff;
+    u64 max_retries;
 };
 
-template <typename T, typename F>
-inline auto ExponentialBackoff(ExponentialConfig config, F &&retryable, const std::stop_token &stoken)
-    -> expected<T, Error> {
+template <std::invocable F, std::predicate Predicate>
+inline auto ExponentialBackoff(ExponentialConfig config, F &&retryable, Predicate &&predicate)
+    -> std::invoke_result_t<F> {
+    using Result = std::invoke_result_t<F>;
+
     auto current_backoff = config.start_backoff;
-    int num_retries = 0;
-    expected<T, Error> result;
+    u64 num_retries{};
+    Result result;
 
-    while (!stoken.stop_requested() && num_retries < config.max_retries) {
+    while (!predicate() && num_retries < config.max_retries) {
         result = retryable();
-
         if (result) {
             break;
         }
 
+        if (predicate()) return result;
         std::this_thread::sleep_for(current_backoff);
         current_backoff = current_backoff * 2 > config.max_backoff ? config.max_backoff : current_backoff * 2;
         num_retries++;
     }
-
-    if (result) {
-        return result;
-    }
-
-    if (stoken.stop_requested()) {
-        return UnexpectedError("stop requested");
-    }
-    return UnexpectedError(std::format("{} reached max retries: {}", config.name, num_retries));
+    return result;
 }
 
-template <typename T, typename F>
-inline auto ExponentialBackoff(ExponentialConfig config, F &&retryable) -> expected<T, Error> {
-    std::stop_token stoken{};
-    return ExponentialBackoff<T>(config, std::forward<F>(retryable), stoken);
+template <std::invocable F>
+inline auto ExponentialBackoff(ExponentialConfig config, F &&retryable) -> std::invoke_result_t<F> {
+    return ExponentialBackoff(config, std::forward<F>(retryable), [] { return false; });
+}
+
+template <std::invocable F>
+inline auto ExponentialBackoff(ExponentialConfig config, F &&retryable, const std::stop_token &stoken)
+    -> std::invoke_result_t<F> {
+    return ExponentialBackoff(config, std::forward<F>(retryable), [&stoken] { return stoken.stop_requested(); });
 }
 
 }  // namespace oryx::retry

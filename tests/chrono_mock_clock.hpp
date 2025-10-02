@@ -14,10 +14,8 @@ struct ChronoMockClock {
 
     static auto now() noexcept -> time_point { return now_; }
 
-    static time_point now_;
+    static inline time_point now_ = {};
 };
-
-ChronoMockClock::time_point ChronoMockClock::now_ = {};
 
 static_assert(std::chrono::is_clock_v<ChronoMockClock>, "ChronoMockClock does not satisfy chrono clock!");
 
