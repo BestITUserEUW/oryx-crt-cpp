@@ -19,7 +19,7 @@ public:
 
     LazyComponent()
         requires std::is_default_constructible_v<T>
-        : factory_([] { return T(); }) {}
+        : factory_([]() { return T(); }) {}
 
     // Constructor that takes a creator callable
     template <typename Factory>

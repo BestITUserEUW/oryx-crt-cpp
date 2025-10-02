@@ -21,18 +21,18 @@ struct B {
 }  // namespace
 
 TEST_CASE("LazyComponent underlying value is initially not initialized") {
-    LazyComponent<A> a{[] -> A { return A("Hello World"); }};
+    LazyComponent<A> a{[]() -> A { return A("Hello World"); }};
     CHECK_FALSE(a.IsInitialized());
 }
 
 TEST_CASE("LazyComponent is initialized after first access") {
-    LazyComponent<A> a{[] -> A { return A("Hello World"); }};
+    LazyComponent<A> a{[]() -> A { return A("Hello World"); }};
     CHECK(a.Get());
     CHECK(a.IsInitialized());
 }
 
 TEST_CASE("Calling explicit Init on LazyComponent should init underlying value") {
-    LazyComponent<A> a{[] -> A { return A("Hello World"); }};
+    LazyComponent<A> a{[]() -> A { return A("Hello World"); }};
     a.Init();
     CHECK(a.Get());
     CHECK(a.IsInitialized());
@@ -59,7 +59,7 @@ TEST_CASE("Object is only created once") {
 }
 
 TEST_CASE("Make lazy creates a lazy component") {
-    auto a = MakeLazy([] { return A("Some Value"); });
+    auto a = MakeLazy([]() { return A("Some Value"); });
     CHECK(std::is_same<decltype(a), LazyComponent<A>>());
     CHECK_EQ(a->message, "Some Value");
 }

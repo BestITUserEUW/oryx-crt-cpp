@@ -1,7 +1,6 @@
 #include "doctest.hpp"
 
 #include <oryx/retry.hpp>
-#include <oryx/expected.hpp>
 #include <stop_token>
 
 using namespace std::chrono_literals;
@@ -12,22 +11,21 @@ const retry::ExponentialConfig kDefaultConfig{.start_backoff = 0s, .max_backoff 
 }
 
 TEST_CASE("Retryable fails and succeeds") {
-    CHECK_FALSE(
-        retry::ExponentialBackoff(kDefaultConfig, []() -> void_expected<Error> { return UnexpectedError(""); }));
-    CHECK(retry::ExponentialBackoff(kDefaultConfig, []() -> void_expected<Error> { return kVoidExpected; }));
+    CHECK_FALSE(retry::ExponentialBackoff(kDefaultConfig, []() { return false; }));
+    CHECK(retry::ExponentialBackoff(kDefaultConfig, []() { return true; }));
 }
 
 TEST_CASE("Retryable succeeds after some tries") {
     int tries = 4;
     int tries_so_far = 0;
-    auto retryable = [&]() -> void_expected<Error> {
+    auto retryable = [&]() {
         tries_so_far++;
 
         if (tries_so_far == tries) {
-            return kVoidExpected;
+            return true;
         }
 
-        return UnexpectedError("");
+        return false;
     };
 
     auto config = kDefaultConfig;
@@ -38,14 +36,14 @@ TEST_CASE("Retryable succeeds after some tries") {
 TEST_CASE("Exhausting max retries") {
     int tries = 4;
     int tries_so_far = 0;
-    auto retryable = [&]() -> void_expected<Error> {
+    auto retryable = [&]() -> bool {
         tries_so_far++;
 
         if (tries_so_far == tries) {
-            return kVoidExpected;
+            return true;
         }
 
-        return UnexpectedError("");
+        return false;
     };
 
     auto config = kDefaultConfig;

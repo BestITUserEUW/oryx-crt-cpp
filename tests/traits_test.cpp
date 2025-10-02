@@ -25,7 +25,7 @@ TEST_CASE("std::function satisfies is_std_function") {
 }
 
 TEST_CASE("lambda does not satisfy is_std_function") {
-    CHECK_FALSE(traits::is_std_function_v<decltype([] -> void { int x; })>);
+    CHECK_FALSE(traits::is_std_function_v<decltype([]() -> void { int x; })>);
 }
 
 TEST_CASE("std::mutex satisfies basic lockable") { CHECK(is_basic_lockable<std::mutex>{}); }

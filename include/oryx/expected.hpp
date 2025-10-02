@@ -5,6 +5,8 @@
 
 #include "error.hpp"
 
+#ifdef __cpp_lib_expected
+
 namespace oryx {
 
 template <class T, class E>
@@ -24,5 +26,7 @@ inline constexpr void_expected<Error> kVoidExpected{};
 [[nodiscard]] inline auto UnexpectedError(const char* what) { return unexpected<Error>(what); }
 [[nodiscard]] inline auto UnexpectedError(const std::string& what) { return unexpected<Error>(what); }
 [[nodiscard]] inline auto UnexpectedError(const std::exception& exc) { return unexpected<Error>(exc.what()); }
+
+#endif
 
 }  // namespace oryx
