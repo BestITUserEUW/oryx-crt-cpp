@@ -1,6 +1,6 @@
 name: linux
 
-on: [ push, pull_request ]
+on: [push, pull_request]
 
 jobs:
   linux:
@@ -19,7 +19,7 @@ jobs:
             cxx: 23
           - compiler: gcc
             compiler-version: 13
-            cxx: 20  
+            cxx: 20
           - compiler: gcc
             compiler-version: 14
             cxx: 23
@@ -64,7 +64,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup
-        uses: actions/checkout@v4
         run: |
           apt-get update
           apt-get install -y valgrind
@@ -83,7 +82,7 @@ jobs:
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1
         with:
-          key: "${{ github.job }}-${{ matrix.compiler }}-${{ matrix.compiler-version }}"
+          key: "${{ github.job }}-valgrind-checks"
           max-size: "2G"
       - name: Compile
         run: |
