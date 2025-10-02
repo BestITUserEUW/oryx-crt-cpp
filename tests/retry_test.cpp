@@ -36,7 +36,7 @@ TEST_CASE("Retryable succeeds after some tries") {
 TEST_CASE("Exhausting max retries") {
     int tries = 4;
     int tries_so_far = 0;
-    auto retryable = [&]() -> bool {
+    auto retryable = [&]() {
         tries_so_far++;
 
         if (tries_so_far == tries) {
@@ -56,14 +56,14 @@ TEST_CASE("Passing a custom predicate") {
     int tries_so_far = 0;
     int tries = 5;
 
-    auto never_succeeds = [&] -> bool {
+    auto never_succeeds = [&]() {
         if (++tries_so_far == tries) {
             flag = true;
         }
         return false;
     };
 
-    auto stopper = [&flag] -> bool { return flag; };
+    auto stopper = [&flag]() { return flag; };
     auto config = kDefaultConfig;
     config.max_retries = 10;
     CHECK_FALSE(retry::ExponentialBackoff(config, never_succeeds, stopper));
@@ -75,7 +75,7 @@ TEST_CASE("Works with stop token as expected") {
     int tries_so_far = 0;
     int tries = 5;
 
-    auto never_succeeds = [&] -> bool {
+    auto never_succeeds = [&]() {
         if (++tries_so_far == tries) {
             ssource.request_stop();
         }

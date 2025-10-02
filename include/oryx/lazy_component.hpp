@@ -13,7 +13,14 @@ namespace oryx {
 template <class T>
 class LazyComponent {
 public:
-    using FactoryContainer = std::move_only_function<T()>;
+#ifdef __cpp_lib_move_only_function
+    template <typename... S>
+    using FunctionType = std::move_only_function<S...>;
+#else
+    template <typename... S>
+    using FunctionType = std::function<S...>;
+#endif
+    using FactoryContainer = FunctionType<T()>;
 
     LazyComponent() = default;
 
@@ -53,7 +60,7 @@ private:
     }
 
     std::once_flag created_flag_{};
-    std::move_only_function<T()> factory_{};
+    FactoryContainer factory_{};
     mutable std::unique_ptr<T> value_{};
 };
 

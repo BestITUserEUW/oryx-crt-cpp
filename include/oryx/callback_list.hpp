@@ -17,6 +17,7 @@ template <class... Args>
 class CallbackList {
 public:
     using ID = uint64_t;
+    using Callback = std::function<void(Args...)>;
 
     static constexpr ID kIDMax = std::numeric_limits<ID>::max();
     /**
@@ -41,13 +42,11 @@ public:
         ID id_;
     };
 
-    using Callback = std::function<void(Args...)>;
-
     CallbackList() = default;
 
     auto Subscribe(Callback&& cb) -> Handle {
         ID id = id_.fetch_add(1, std::memory_order_relaxed);
-        subs_.Apply([&](auto& subs) mutable { subs.emplace_back(id, std::forward<Callback>(cb)); });
+        subs_.Apply([&](auto& subs) { subs.emplace_back(id, std::forward<Callback>(cb)); });
         return Handle(id);
     }
 
