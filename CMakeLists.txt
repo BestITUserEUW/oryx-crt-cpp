@@ -9,11 +9,11 @@ include(cmake/utils.cmake)
 option(ORYX_CRT_BUILD_SHARED_LIBS "Build shared library" ${BUILD_SHARED_LIBS})
 option(ORYX_CRT_BUILD_TESTS "Build tests" OFF)
 option(ORYX_CRT_INSTALL "Install the project" ${PROJECT_IS_TOP_LEVEL})
-option(ORYX_SANITIZE_ADDRESS "Enable address sanitizer in tests" OFF)
-option(ORYX_SANITIZE_THREAD "Enable thread sanitizer in tests" OFF)
+option(ORYX_CRT_SANITIZE_ADDRESS "Enable address sanitizer in tests" OFF)
+option(ORYX_CRT_SANITIZE_THREAD "Enable thread sanitizer in tests" OFF)
 
-if(ORYX_SANITIZE_ADDRESS AND ORYX_SANITIZE_THREAD)
-    message(FATAL_ERROR "ORYX_SANITIZE_ADDRESS and ORYX_SANITIZE_THREAD are mutually exclusive")
+if(ORYX_CRT_SANITIZE_ADDRESS AND ORYX_CRT_SANITIZE_THREAD)
+    message(FATAL_ERROR "ORYX_CRT_SANITIZE_ADDRESS and ORYX_CRT_SANITIZE_THREAD are mutually exclusive")
 endif()
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -69,9 +69,9 @@ target_sources(${PROJECT_NAME}
         FILES ${ORYX_CRT_HEADERS}
 )
 
-if(ORYX_SANITIZE_ADDRESS)
+if(ORYX_CRT_SANITIZE_ADDRESS)
     oryx_enable_addr_sanitizer(${PROJECT_NAME})
-elseif(ORYX_SANITIZE_THREAD)
+elseif(ORYX_CRT_SANITIZE_THREAD)
     oryx_enable_thread_sanitizer(${PROJECT_NAME})
 endif()
 
