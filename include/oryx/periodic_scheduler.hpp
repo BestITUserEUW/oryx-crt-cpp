@@ -1,15 +1,15 @@
 #pragma once
 
-#include <atomic>
 #include <limits>
-#include <optional>
 #include <string>
 #include <memory>
 #include <chrono>
+#include <thread>
 #include <utility>
 #include <vector>
 #include <functional>
 #include <mutex>
+#include <stop_token>
 
 #include "thread_pool.hpp"
 
@@ -82,7 +82,7 @@ public:
 
         void Reset() {
             id_ = kTaskIDMax;
-            scheduler_ = nullptr;
+            scheduler_.reset();
         }
 
         std::weak_ptr<PeriodicSchedulerImpl> scheduler_{};
@@ -91,21 +91,23 @@ public:
 
     auto Schedule(TaskFn&& task, Duration interval, TaskStopPolicy stop_policy = TaskStopPolicy::kWaitForCompletion)
         -> TaskHandle {
-        TaskID id = task_counter_.fetch_add(1, std::memory_order_relaxed);
-        {
-            std::lock_guard lock{tasks_mtx_};
-            tasks_.emplace_back(std::move(task), id, stop_policy, interval, std::future<void>{}, Clock::now());
-        }
+        std::unique_lock lock{mtx_};
+        TaskID id = task_counter_++;
+        tasks_.emplace_back(std::move(task), id, stop_policy, interval, std::future<void>(), Clock::now());
+        lock.unlock();
         cv_.notify_all();
         return TaskHandle(std::enable_shared_from_this<PeriodicSchedulerImpl<Clock>>::weak_from_this(), id);
     }
 
     auto GetNumTasks() const -> size_t {
-        std::lock_guard lock{tasks_mtx_};
+        std::lock_guard lock{mtx_};
         return tasks_.size();
     }
 
-    auto TotalNumTasks() const -> size_t { return task_counter_.load(std::memory_order_relaxed); }
+    auto GetTaskCounter() const -> size_t {
+        std::lock_guard lock{mtx_};
+        return task_counter_;
+    }
 
     static auto Create(ThreadPool& pool) -> std::shared_ptr<PeriodicSchedulerImpl> {
         return std::shared_ptr<PeriodicSchedulerImpl>(new PeriodicSchedulerImpl(pool));
@@ -126,46 +128,43 @@ private:
     PeriodicSchedulerImpl(ThreadPool& pool)
         : pool_(pool),
           tasks_(),
-          tasks_mtx_(),
+          mtx_(),
           cv_(),
           task_counter_(),
           worker_(&PeriodicSchedulerImpl<Clock>::ScheduleLoop, this) {}
 
     auto StopTask(TaskHandle& handle) -> bool {
-        std::optional<Task> task{};
-        {
-            std::lock_guard lock{tasks_mtx_};
-            auto it = std::ranges::find_if(tasks_, [&handle](const auto& t) { return handle.id_ == t.id; });
-            if (it != tasks_.end()) {
-                task.emplace(std::move(*it));
-                tasks_.erase(it);
-            }
-        }
-
-        if (!task) {
+        std::unique_lock lock{mtx_};
+        auto it = std::ranges::find_if(tasks_, [&handle](const auto& task) { return handle.id_ == task.id; });
+        if (it == tasks_.end()) {
             return false;
         }
 
-        if (task->stop_policy == TaskStopPolicy::kWaitForCompletion) {
-            if (task->promise.valid()) {
-                task->promise.wait();
+        auto task = std::move(*it);
+        tasks_.erase(it);
+        lock.unlock();
+
+        if (task.stop_policy == TaskStopPolicy::kWaitForCompletion) {
+            if (task.promise.valid()) {
+                task.promise.wait();
             }
         }
-
         handle.Reset();
         return true;
     }
 
     void ScheduleLoop(const std::stop_token& stoken) {
+        std::stop_callback scb{stoken, [this] { cv_.notify_all(); }};
+
         while (!stoken.stop_requested()) {
-            std::unique_lock lock{tasks_mtx_};
+            std::unique_lock lock{mtx_};
             if (tasks_.empty()) {
-                cv_.wait(lock, stoken, [&] { return stoken.stop_requested() || !tasks_.empty(); });
+                cv_.wait(lock, stoken, [this] { return !tasks_.empty(); });
                 continue;
             }
 
             auto now = Clock::now();
-            TimePoint next_wake_time = TimePoint::max();
+            auto next_wake_time = TimePoint::max();
             for (Task& task : tasks_) {
                 if (now >= task.next_execution) {
                     bool is_running = task.promise.valid() &&
@@ -180,17 +179,17 @@ private:
             }
 
             if (next_wake_time != TimePoint::max()) {
-                cv_.wait_until(lock, stoken, next_wake_time,
-                               [&] { return stoken.stop_requested() || !tasks_.empty(); });
+                auto id = task_counter_;
+                cv_.wait_until(lock, stoken, next_wake_time, [this, id]() { return id < task_counter_; });
             }
         }
     }
 
     ThreadPool& pool_;
     std::vector<Task> tasks_;
-    std::mutex tasks_mtx_;
+    mutable std::mutex mtx_;
     std::condition_variable_any cv_;
-    std::atomic<TaskID> task_counter_;
+    TaskID task_counter_;
     std::jthread worker_;
 };
 

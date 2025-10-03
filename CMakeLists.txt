@@ -2,9 +2,19 @@ cmake_minimum_required(VERSION 3.24)
 
 project(oryx-crt-cpp VERSION 0.1.0 LANGUAGES CXX)
 
+message(STATUS "Build oryx-crt-cpp: ${PROJECT_VERSION}")
+
+include(cmake/utils.cmake)
+
 option(ORYX_CRT_BUILD_SHARED_LIBS "Build shared library" ${BUILD_SHARED_LIBS})
 option(ORYX_CRT_BUILD_TESTS "Build tests" OFF)
 option(ORYX_CRT_INSTALL "Install the project" ${PROJECT_IS_TOP_LEVEL})
+option(ORYX_SANITIZE_ADDRESS "Enable address sanitizer in tests" OFF)
+option(ORYX_SANITIZE_THREAD "Enable thread sanitizer in tests" OFF)
+
+if(ORYX_SANITIZE_ADDRESS AND ORYX_SANITIZE_THREAD)
+    message(FATAL_ERROR "ORYX_SANITIZE_ADDRESS and ORYX_SANITIZE_THREAD are mutually exclusive")
+endif()
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if(NOT DEFINED CMAKE_CXX_STANDARD)
@@ -19,7 +29,7 @@ else()
     add_library(${PROJECT_NAME} STATIC)
 endif()
 
-add_library("${PROJECT_NAME}::${PROJECT_NAME}" ALIAS ${PROJECT_NAME})
+add_library("oryx::${PROJECT_NAME}" ALIAS ${PROJECT_NAME})
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(${PROJECT_NAME} 
@@ -58,6 +68,12 @@ target_sources(${PROJECT_NAME}
         BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include"
         FILES ${ORYX_CRT_HEADERS}
 )
+
+if(ORYX_SANITIZE_ADDRESS)
+    oryx_enable_addr_sanitizer(${PROJECT_NAME})
+elseif(ORYX_SANITIZE_THREAD)
+    oryx_enable_thread_sanitizer(${PROJECT_NAME})
+endif()
 
 
 if(ORYX_CRT_BUILD_TESTS)

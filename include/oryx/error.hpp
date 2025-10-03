@@ -19,4 +19,4 @@ private:
     std::string what_;
 };
 
-};  // namespace oryx
+}  // namespace oryx
