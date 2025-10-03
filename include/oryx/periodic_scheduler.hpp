@@ -131,7 +131,7 @@ private:
           mtx_(),
           cv_(),
           task_counter_(),
-          worker_(&PeriodicSchedulerImpl<Clock>::ScheduleLoop, this) {}
+          worker_([this](const std::stop_token& stoken) { ScheduleLoop(stoken); }) {}
 
     auto StopTask(TaskHandle& handle) -> bool {
         std::unique_lock lock{mtx_};
@@ -154,7 +154,7 @@ private:
     }
 
     void ScheduleLoop(const std::stop_token& stoken) {
-        std::stop_callback scb{stoken, [this] { cv_.notify_all(); }};
+        std::stop_callback scb{stoken, [this]() { cv_.notify_all(); }};
 
         while (!stoken.stop_requested()) {
             std::unique_lock lock{mtx_};
