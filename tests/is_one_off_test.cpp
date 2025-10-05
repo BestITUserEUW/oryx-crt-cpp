@@ -2,9 +2,9 @@
 
 #include <cstdint>
 
-#include <oryx/is_one_of.hpp>
+#include <oryx/crt/is_one_of.hpp>
 
-using namespace oryx;
+using namespace oryx::crt;
 
 namespace {
 

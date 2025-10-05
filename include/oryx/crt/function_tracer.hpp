@@ -6,9 +6,9 @@
     #include <source_location>
     #include <string_view>
 
-    #include <oryx/chrono/stopwatch.hpp>
+    #include "stopwatch.hpp"
 
-namespace oryx {
+namespace oryx::crt {
 
 class FunctionTracer {
 public:
@@ -22,7 +22,7 @@ private:
     std::string_view name_;
 };
 
-template <class Stopwatch = chrono::Stopwatch>
+template <class Watch = Stopwatch>
 class FunctionTimingTracer {
 public:
     constexpr FunctionTimingTracer(const std::source_location loc = std::source_location::current())
@@ -35,13 +35,13 @@ public:
 
 private:
     std::string_view name_;
-    Stopwatch sw_;
+    Watch sw_;
 };
 
-}  // namespace oryx
+}  // namespace oryx::crt
 
-    #define ORYX_TRACE_FUNCTION() oryx::FunctionTracer __oryx__func_tracer__
-    #define ORYX_TRACE_FUNCTION_TIMING() oryx::FunctionTimingTracer __oryx__func_timing_tracer__
+    #define ORYX_TRACE_FUNCTION() oryx::crt::FunctionTracer __oryx__func_tracer__
+    #define ORYX_TRACE_FUNCTION_TIMING() oryx::crt::FunctionTimingTracer __oryx__func_timing_tracer__
 #else
     #define ORYX_TRACE_FUNCTION() (void)0
     #define ORYX_TRACE_FUNCTION_TIMING() (void)0

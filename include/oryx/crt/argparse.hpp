@@ -7,15 +7,16 @@
 
 #include "from_chars.hpp"
 
-namespace oryx::argparse {
+namespace oryx::crt {
+
 namespace details {
 template <typename>
 constexpr bool always_false = false;
 }
 
-class CLI {
+class ArgumentParser {
 public:
-    CLI(int argc, const char* const* argv)
+    ArgumentParser(int argc, const char* const* argv)
         : view_(argv, argc) {}
 
     auto Contains(std::string_view option) const { return std::ranges::find(view_, option) != view_.end(); }
@@ -59,4 +60,4 @@ private:
     std::basic_string_view<const char*> view_;
 };
 
-}  // namespace oryx::argparse
+}  // namespace oryx::crt

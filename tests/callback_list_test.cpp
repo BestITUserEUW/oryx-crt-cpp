@@ -1,10 +1,10 @@
-#include <numeric>
-
 #include "doctest.hpp"
 
-#include <oryx/callback_list.hpp>
+#include <numeric>
 
-using namespace oryx;
+#include <oryx/crt/callback_list.hpp>
+
+using namespace oryx::crt;
 
 TEST_CASE("New CallbackList should be empty") {
     CallbackList<int> cbv;

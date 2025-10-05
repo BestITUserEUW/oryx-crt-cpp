@@ -3,7 +3,7 @@
 #include <chrono>
 #include <mutex>
 
-namespace oryx {
+namespace oryx::crt {
 
 struct ChronoMockClock {
 public:
@@ -38,4 +38,4 @@ private:
 
 static_assert(std::chrono::is_clock_v<ChronoMockClock>, "ChronoMockClock does not satisfy chrono clock!");
 
-}  // namespace oryx
+}  // namespace oryx::crt

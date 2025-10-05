@@ -1,4 +1,4 @@
-#include <oryx/uuid.hpp>
+#include <oryx/crt/uuid.hpp>
 
 #include <array>
 #include <format>
@@ -6,7 +6,7 @@
 #include <string>
 #include <algorithm>
 
-namespace oryx {
+namespace oryx::crt {
 
 auto uuid4::Generate() -> std::string {
     std::random_device rd;
@@ -35,4 +35,4 @@ auto uuid4::Generate() -> std::string {
         static_cast<int>(bytes[14]), static_cast<int>(bytes[15]));
 }
 
-}  // namespace oryx
+}  // namespace oryx::crt

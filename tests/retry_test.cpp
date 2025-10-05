@@ -1,10 +1,11 @@
 #include "doctest.hpp"
 
-#include <oryx/retry.hpp>
 #include <stop_token>
 
+#include <oryx/crt/retry.hpp>
+
 using namespace std::chrono_literals;
-using namespace oryx;
+using namespace oryx::crt;
 
 namespace {
 const retry::ExponentialConfig kDefaultConfig{.start_backoff = 0s, .max_backoff = 0s, .max_retries = 1};

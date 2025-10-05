@@ -1,11 +1,11 @@
 #include "doctest.hpp"
 
 #include <string>
-
-#include <oryx/lazy_component.hpp>
 #include <type_traits>
 
-using namespace oryx;
+#include <oryx/crt/lazy_component.hpp>
+
+using namespace oryx::crt;
 
 namespace {
 

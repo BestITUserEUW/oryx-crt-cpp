@@ -3,10 +3,10 @@
 #include <chrono>
 #include <optional>
 
-#include <oryx/scope_exit.hpp>
-#include <oryx/chrono/stopwatch.hpp>
+#include "scope_exit.hpp"
+#include "stopwatch.hpp"
 
-namespace oryx::chrono {
+namespace oryx::crt {
 
 template <class Clock = std::chrono::steady_clock>
     requires std::chrono::is_clock_v<Clock>
@@ -45,4 +45,4 @@ auto MakeFrameRateTimer(int target_fps) {
     return CycleTimer<Clock>{typename CycleTimer<Clock>::Duration{1000 / target_fps}};
 }
 
-}  // namespace oryx::chrono
+}  // namespace oryx::crt

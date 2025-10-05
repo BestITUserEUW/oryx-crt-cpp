@@ -2,9 +2,9 @@
 
 #include <string>
 
-#include <oryx/synchronized.hpp>
+#include <oryx/crt/synchronized.hpp>
 
-using namespace oryx;
+using namespace oryx::crt;
 
 TEST_CASE("UpdateGuard write / read lock works") {
     Synchronized<int> data{};

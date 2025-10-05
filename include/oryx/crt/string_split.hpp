@@ -6,7 +6,7 @@
 // NOTE: If you are running with C++23 use std::views::split which does not need memory allocation.
 // https://en.cppreference.com/w/cpp/ranges/split_view.html
 
-namespace oryx {
+namespace oryx::crt {
 namespace detail {
 struct StringSplitFunctor {
     constexpr auto operator()(std::string_view input, char delim) const -> std::vector<std::string_view> {
@@ -26,4 +26,4 @@ struct StringSplitFunctor {
 
 inline constexpr detail::StringSplitFunctor StringSplit{};
 
-}  // namespace oryx
+}  // namespace oryx::crt

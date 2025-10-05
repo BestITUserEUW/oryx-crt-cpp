@@ -7,7 +7,7 @@
 
 #ifdef __cpp_lib_expected
 
-namespace oryx {
+namespace oryx::crt {
 
 template <class T, class E>
 using expected = std::expected<T, E>;

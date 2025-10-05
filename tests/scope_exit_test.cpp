@@ -1,8 +1,8 @@
 #include "doctest.hpp"
 
-#include <oryx/scope_exit.hpp>
+#include <oryx/crt/scope_exit.hpp>
 
-using namespace oryx;
+using namespace oryx::crt;
 
 TEST_CASE("ScopeExit calls fn on scope exit") {
     bool flag{};

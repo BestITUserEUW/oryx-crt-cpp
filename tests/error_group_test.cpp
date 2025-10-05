@@ -1,8 +1,8 @@
 #include "doctest.hpp"
 
-#include <oryx/error_group.hpp>
+#include <oryx/crt/error_group.hpp>
 
-using namespace oryx;
+using namespace oryx::crt;
 
 TEST_CASE("ErrorGroup construction") {
     SUBCASE("Default construction") {

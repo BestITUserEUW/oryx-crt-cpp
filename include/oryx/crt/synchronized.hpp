@@ -4,9 +4,9 @@
 #include <type_traits>
 #include <utility>
 
-#include <oryx/traits.hpp>
+#include "traits.hpp"
 
-namespace oryx {
+namespace oryx::crt {
 
 template <typename GuardedType, traits::BasicLockable MutexType = std::mutex>
 class Synchronized;
@@ -92,4 +92,4 @@ private:
     mutable MutexType mutex_;
     GuardedType guarded_data_;
 };
-}  // namespace oryx
+}  // namespace oryx::crt

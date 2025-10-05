@@ -3,9 +3,9 @@
 #include <vector>
 #include <format>
 
-#include <oryx/error.hpp>
+#include "error.hpp"
 
-namespace oryx {
+namespace oryx::crt {
 
 class ErrorGroup {
 public:
@@ -36,4 +36,4 @@ private:
     std::vector<Error> errors_;
 };
 
-}  // namespace oryx
+}  // namespace oryx::crt

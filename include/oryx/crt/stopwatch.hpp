@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-namespace oryx::chrono {
+namespace oryx::crt {
 namespace details {
 
 template <class Clock>
@@ -32,4 +32,4 @@ private:
 using HighResolutionStopwatch = details::StopwatchImpl<std::chrono::high_resolution_clock>;
 using Stopwatch = details::StopwatchImpl<std::chrono::steady_clock>;
 
-}  // namespace oryx::chrono
+}  // namespace oryx::crt

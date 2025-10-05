@@ -2,9 +2,9 @@
 
 #include <functional>
 #include <mutex>
-#include <oryx/traits.hpp>
+#include <oryx/crt/traits.hpp>
 
-using namespace oryx;
+using namespace oryx::crt;
 
 namespace {
 

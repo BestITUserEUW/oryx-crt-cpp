@@ -1,8 +1,12 @@
 cmake_minimum_required(VERSION 3.24)
 
-project(oryx-crt-cpp VERSION 0.2.0 LANGUAGES CXX)
+include(cmake/utils.cmake)
 
-message(STATUS "Build oryx-crt-cpp: ${PROJECT_VERSION}")
+oryx_extract_version()
+
+project(oryx-crt-cpp VERSION ${ORYX_CRT_VERSION} LANGUAGES CXX)
+
+message(STATUS "Build ${PROJECT_NAME}: ${PROJECT_VERSION}")
 
 include(cmake/utils.cmake)
 
@@ -60,8 +64,7 @@ file(GLOB_RECURSE ORYX_CRT_HEADERS
 )
 
 target_sources(${PROJECT_NAME} 
-    PRIVATE 
-        src/frame_rate_controller.cpp
+    PRIVATE
         src/uuid.cpp
     PUBLIC
         FILE_SET HEADERS

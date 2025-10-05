@@ -2,9 +2,9 @@
 
 #include <filesystem>
 
-#include <oryx/unique_file_ptr.hpp>
+#include <oryx/crt/unique_file_ptr.hpp>
 
-using namespace oryx;
+using namespace oryx::crt;
 
 namespace {
 

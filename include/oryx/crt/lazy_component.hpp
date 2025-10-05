@@ -8,7 +8,7 @@
 #include <utility>
 #include <cassert>
 
-namespace oryx {
+namespace oryx::crt {
 
 template <class T>
 class LazyComponent {
@@ -72,4 +72,4 @@ auto MakeLazy(Factory&& factory) {
     return LazyComponent<std::invoke_result_t<Factory>>(std::forward<Factory>(factory));
 }
 
-}  // namespace oryx
+}  // namespace oryx::crt

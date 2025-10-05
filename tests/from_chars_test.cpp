@@ -1,8 +1,8 @@
-#include <oryx/from_chars.hpp>
+#include <oryx/crt/from_chars.hpp>
 
 #include "doctest.hpp"
 
-using namespace oryx;
+using namespace oryx::crt;
 
 TEST_CASE("Parsing valid values") {
     CHECK(FromChars<int>("1").value() == 1);

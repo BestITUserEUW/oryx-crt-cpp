@@ -7,7 +7,7 @@
 
 #include "synchronized.hpp"
 
-namespace oryx {
+namespace oryx::crt {
 
 /**
  * @brief CallbackList is a thread safe list that stores callbacks, and can notify these callbacks.
@@ -92,4 +92,4 @@ private:
     Synchronized<std::vector<Subscriber>> subs_{};
 };
 
-}  // namespace oryx
+}  // namespace oryx::crt

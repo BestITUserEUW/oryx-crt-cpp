@@ -4,17 +4,16 @@
 #include <concepts>
 #include <thread>
 #include <type_traits>
+#include <cstdint>
 
-#include <oryx/types.hpp>
-
-namespace oryx::retry {
+namespace oryx::crt::retry {
 
 struct ExponentialConfig {
     using Duration = std::chrono::milliseconds;
 
     Duration start_backoff;
     Duration max_backoff;
-    u64 max_retries;
+    uint64_t max_retries;
 };
 
 template <std::invocable F, std::predicate Predicate>
@@ -23,7 +22,7 @@ inline auto ExponentialBackoff(ExponentialConfig config, F &&retryable, Predicat
     using Result = std::invoke_result_t<F>;
 
     auto current_backoff = config.start_backoff;
-    u64 num_retries{};
+    uint64_t num_retries{};
     Result result;
 
     while (!predicate() && num_retries < config.max_retries) {
@@ -51,4 +50,4 @@ inline auto ExponentialBackoff(ExponentialConfig config, F &&retryable, const st
     return ExponentialBackoff(config, std::forward<F>(retryable), [&stoken] { return stoken.stop_requested(); });
 }
 
-}  // namespace oryx::retry
+}  // namespace oryx::crt::retry

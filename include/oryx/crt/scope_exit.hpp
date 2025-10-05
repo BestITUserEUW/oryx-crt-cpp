@@ -2,7 +2,7 @@
 
 #include <utility>
 
-namespace oryx {
+namespace oryx::crt {
 
 template <class F>
 class ScopeExit {
@@ -29,4 +29,4 @@ private:
     bool is_owner_{true};
 };
 
-}  // namespace oryx
+}  // namespace oryx::crt

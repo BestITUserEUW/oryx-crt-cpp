@@ -3,7 +3,7 @@
 #include <type_traits>
 #include <functional>
 
-namespace oryx::traits {
+namespace oryx::crt::traits {
 
 template <typename T>
 struct is_std_function : std::false_type {};
@@ -20,4 +20,4 @@ concept BasicLockable = requires(L m) {
     m.unlock();
 };
 
-}  // namespace oryx::traits
+}  // namespace oryx::crt::traits

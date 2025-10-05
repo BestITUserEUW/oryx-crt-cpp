@@ -3,10 +3,10 @@
 
 #include <atomic>
 
-#include <oryx/periodic_scheduler.hpp>
-#include <oryx/chrono/stopwatch.hpp>
+#include <oryx/crt/periodic_scheduler.hpp>
+#include <oryx/crt/stopwatch.hpp>
 
-using namespace oryx;
+using namespace oryx::crt;
 using namespace std::chrono_literals;
 
 namespace {
@@ -15,7 +15,7 @@ using Scheduler = detail::PeriodicSchedulerImpl<ChronoMockClock>;
 
 template <typename Predicate>
 auto WaitForCondition(Predicate pred, std::chrono::milliseconds timeout = 5000ms) -> bool {
-    chrono::Stopwatch sw{};
+    Stopwatch sw{};
     while (!pred()) {
         if (sw.ElapsedMs() > timeout) {
             return false;

@@ -13,7 +13,7 @@
 
 #include "thread_pool.hpp"
 
-namespace oryx {
+namespace oryx::crt {
 namespace detail {
 
 template <class Clock>
@@ -198,4 +198,4 @@ private:
 using PeriodicScheduler = detail::PeriodicSchedulerImpl<std::chrono::steady_clock>;
 using PeriodicSchedulerPtr = std::shared_ptr<PeriodicScheduler>;
 
-}  // namespace oryx
+}  // namespace oryx::crt

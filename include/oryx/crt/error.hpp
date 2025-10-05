@@ -3,7 +3,7 @@
 #include <string>
 #include <string_view>
 
-namespace oryx {
+namespace oryx::crt {
 
 /**
  * @brief Base error class for exception free programming
@@ -19,4 +19,4 @@ private:
     std::string what_;
 };
 
-}  // namespace oryx
+}  // namespace oryx::crt

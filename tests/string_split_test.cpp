@@ -1,9 +1,10 @@
 #include "doctest.hpp"
 
 #include <cstdio>
-#include <oryx/string_split.hpp>
 
-namespace oryx {
+#include <oryx/crt/string_split.hpp>
+
+namespace oryx::crt {
 
 TEST_CASE("split string -") {
     const auto split = StringSplit("this-will-be-split", '-');
@@ -32,4 +33,4 @@ TEST_CASE("nothing will be split") {
     REQUIRE(split[0] == "this will not be split");
 }
 
-}  // namespace oryx
+}  // namespace oryx::crt

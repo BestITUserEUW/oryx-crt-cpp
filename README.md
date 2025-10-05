@@ -1,10 +1,8 @@
 # oryx-crt-cpp
 
-Common C++ Runtime used for personal C++ Projects. Happy to accept any contributions and improvements to this library
+Common C++ Runtime used for personal C++ Projects.
 
 ## Third Party libraries
-
-Even tho my libary is licensened with the UNLICENSE make sure to check third party licences of the libs included in this library, when using this lib in your project.
 
 - [httplib](https://github.com/yhirose/cpp-httplib) MIT license
 - [thread_pool](https://github.com/bshoshany/thread-pool.git) MIT license

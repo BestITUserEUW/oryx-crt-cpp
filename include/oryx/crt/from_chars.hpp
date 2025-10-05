@@ -7,7 +7,7 @@
 
 // std::optional wrapper around the from chars interface
 
-namespace oryx {
+namespace oryx::crt {
 
 /**
  * @brief std::from_chars wrapper, returning nullopt if from chars reports error
@@ -39,4 +39,4 @@ constexpr auto FromChars<bool>(std::string_view s) -> std::optional<bool> {
 #endif
 }
 
-}  // namespace oryx
+}  // namespace oryx::crt

@@ -2,8 +2,8 @@
 
 #include <string>
 
-namespace oryx::uuid4 {
+namespace oryx::crt::uuid4 {
 
 auto Generate() -> std::string;
 
-}  // namespace oryx::uuid4
+}  // namespace oryx::crt::uuid4
