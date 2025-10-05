@@ -65,6 +65,7 @@ file(GLOB_RECURSE ORYX_CRT_HEADERS
 
 target_sources(${PROJECT_NAME} 
     PRIVATE
+        src/version.cpp
         src/uuid.cpp
     PUBLIC
         FILE_SET HEADERS
