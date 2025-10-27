@@ -49,6 +49,13 @@ public:
     explicit Synchronized(Args &&...args)
         : guarded_data_{std::forward<Args>(args)...} {}
 
+    operator value_type() const noexcept
+        requires(std::is_copy_constructible_v<value_type>)
+    {
+        std::lock_guard lock{mutex_};
+        return guarded_data_;
+    }
+
     auto WriteLock() { return UpdateGuard{*this}; }
 
     auto ReadLock() const { return UpdateGuard<const value_type, MutexType>{*this}; }
