@@ -32,7 +32,7 @@ public:
 
 private:
     const Duration target_;
-    details::StopwatchImpl<Clock> sw_{};
+    detail::StopwatchImpl<Clock> sw_{};
 };
 
 template <class Clock>

@@ -9,7 +9,7 @@
 using namespace oryx::crt;
 
 TEST_CASE("Reset calls clock now") {
-    details::StopwatchImpl<oryx::crt::ChronoMockClock> sw{};
+    detail::StopwatchImpl<oryx::crt::ChronoMockClock> sw{};
     const auto tp = oryx::crt::ChronoMockClock::time_point{std::chrono::seconds(5)};
     oryx::crt::ChronoMockClock::set_time(tp);
     sw.Reset();
@@ -17,7 +17,7 @@ TEST_CASE("Reset calls clock now") {
 }
 
 TEST_CASE("Elapsed and elapsed ms subtracts now from start") {
-    details::StopwatchImpl<oryx::crt::ChronoMockClock> sw{
+    detail::StopwatchImpl<oryx::crt::ChronoMockClock> sw{
         oryx::crt::ChronoMockClock::time_point{std::chrono::seconds(5)}};
     const auto tp = oryx::crt::ChronoMockClock::time_point{std::chrono::seconds(10)};
     oryx::crt::ChronoMockClock::set_time(tp);

@@ -9,7 +9,7 @@
 
 namespace oryx::crt {
 
-namespace details {
+namespace detail {
 template <typename>
 constexpr bool always_false = false;
 }
@@ -40,7 +40,7 @@ public:
         } else if constexpr (std::is_floating_point_v<T>) {
             return FromChars<T>(*vit);
         } else {
-            static_assert(details::always_false<T>,
+            static_assert(detail::always_false<T>,
                           "Get argument only supports std::string integral and floating point types");
         }
     }

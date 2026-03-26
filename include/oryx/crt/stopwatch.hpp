@@ -3,7 +3,7 @@
 #include <chrono>
 
 namespace oryx::crt {
-namespace details {
+namespace detail {
 
 template <class Clock>
     requires std::chrono::is_clock_v<Clock>
@@ -27,9 +27,9 @@ private:
     Clock::time_point start_;
 };
 
-}  // namespace details
+}  // namespace detail
 
-using HighResolutionStopwatch = details::StopwatchImpl<std::chrono::high_resolution_clock>;
-using Stopwatch = details::StopwatchImpl<std::chrono::steady_clock>;
+using HighResolutionStopwatch = detail::StopwatchImpl<std::chrono::high_resolution_clock>;
+using Stopwatch = detail::StopwatchImpl<std::chrono::steady_clock>;
 
 }  // namespace oryx::crt
